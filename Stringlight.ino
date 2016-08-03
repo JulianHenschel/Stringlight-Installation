@@ -17,15 +17,13 @@ class Stringlight {
     int _channel;
     int _maxValue = 255;
     int _minValue = 0;
-    int _direction = 1;
     float _counter = 0;
     float _speed = 0.25;
 
   public:
     Stringlight(int channel, float startValue);
     void update();
-    void setValue(int brightness);
-
+    
 };
 
 Stringlight::Stringlight(int channel, float startValue)
@@ -38,10 +36,10 @@ void Stringlight::update()
 {
 
   float sinusCurve = sin(radians(_counter));
-  int mapping = mapFloat(sinusCurve, -1, 1, 0, 255);
+  float mapping = mapFloat(sinusCurve, -1, 1, _minValue, _maxValue);
 
   // send value to dmx
-  setValue(mapping);
+  DmxMaster.write(_channel, mapping);
 
   // debug
   //Serial.println( mapping );
@@ -49,11 +47,6 @@ void Stringlight::update()
   // update counter
   _counter += _speed;
   
-}
-
-void Stringlight::setValue(int brightness)
-{
-  DmxMaster.write(_channel, brightness);
 }
 
 /*
@@ -78,6 +71,6 @@ void loop() {
   sl1.update();
   sl2.update();
 
-  delay(50);
+  delay(100);
 
 }
