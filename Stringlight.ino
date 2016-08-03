@@ -15,11 +15,11 @@ class Stringlight {
 
   private:
     int _channel;
-    int _value = 0;
     int _maxValue = 255;
     int _minValue = 0;
     int _direction = 1;
     float _counter = 0;
+    float _speed = 0.25;
 
   public:
     Stringlight(int channel, float startValue);
@@ -44,10 +44,10 @@ void Stringlight::update()
   setValue(mapping);
 
   // debug
-  Serial.println( mapping );
+  //Serial.println( mapping );
 
   // update counter
-  _counter += 5;
+  _counter += _speed;
   
 }
 
@@ -60,7 +60,7 @@ void Stringlight::setValue(int brightness)
    Arduino sketch
 */
 Stringlight sl1(1, 0);
-Stringlight sl2(2, 100);
+Stringlight sl2(2, 10);
 
 void setup() {
 
@@ -78,7 +78,6 @@ void loop() {
   sl1.update();
   sl2.update();
 
-  delay(100);
-
+  delay(50);
 
 }
