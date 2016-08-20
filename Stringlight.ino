@@ -1,5 +1,7 @@
 #include <DmxMaster.h>
 
+float _speed2;
+
 /*
  * mapping float
  */
@@ -16,9 +18,9 @@ class Stringlight {
   private:
     int _channel;
     int _maxValue = 255;
-    int _minValue = 0;
+    int _minValue = 1;
     float _counter = 0;
-    float _speed = 0.25;
+    float _speed = 10;
 
   public:
     Stringlight(int channel, float startValue);
@@ -41,25 +43,45 @@ void Stringlight::update()
   // send value to dmx
   DmxMaster.write(_channel, mapping);
 
-  // debug
-  //Serial.println( mapping );
+  
 
   // update counter
-  _counter += _speed;
+  float speedval = map(_speed2,0,1024,0,100);
+  _counter += speedval;
+
+  
   
 }
 
 /*
    Arduino sketch
 */
-Stringlight sl1(1, 0);
-Stringlight sl2(2, 10);
+
+
+
+int stringsCount = 10;
+int PIstep = 360/stringsCount;
+
+Stringlight sl1(1, PIstep*1);
+Stringlight sl2(2, PIstep*2);
+Stringlight sl3(3, PIstep*3);
+Stringlight sl4(4, PIstep*4);
+Stringlight sl5(5, PIstep*5);
+Stringlight sl6(6, PIstep*6);
+Stringlight sl7(7, PIstep*7);
+Stringlight sl8(8, PIstep*8);
+Stringlight sl9(9, PIstep*9);
+Stringlight sl10(10, PIstep*10);
+
+int value = 0;
 
 void setup() {
 
+  float _speed2 = 0;
+
   // init dmx shield
   DmxMaster.usePin(3);
-  DmxMaster.maxChannel(4);
+  DmxMaster.maxChannel(12);
 
   // init serial com
   Serial.begin(9600);
@@ -68,9 +90,24 @@ void setup() {
 
 void loop() {
 
+
+
+  _speed2 = analogRead(A0);
+
+  // debug
+  //Serial.println( _speed2 );
+  
   sl1.update();
   sl2.update();
-
+  sl3.update();
+  sl4.update();
+  sl5.update();
+  sl6.update();
+  sl7.update();
+  sl8.update();
+  sl9.update();
+  sl10.update();
+  
   delay(100);
 
 }
